@@ -36,11 +36,11 @@ class Solver(object):
         if model is None:
             self.model = model = MMIM(hp)
         
-        if torch.cuda.is_available():
-            self.device = torch.device("cuda")
-            model = model.cuda()
-        else:
-            self.device = torch.device("cpu")
+        #if torch.cuda.is_available():
+        #    self.device = torch.device("cuda")
+        #    model = model.cuda()
+        #else:
+        #    self.device = torch.device("cpu")
 
         # criterion
         if self.hp.dataset == "ur_funny":
@@ -134,12 +134,12 @@ class Solver(object):
                         break
                 model.zero_grad()
 
-                with torch.cuda.device(0):
-                    text, visual, audio, y, l, bert_sent, bert_sent_type, bert_sent_mask = \
-                    text.cuda(), visual.cuda(), audio.cuda(), y.cuda(), l.cuda(), bert_sent.cuda(), \
-                    bert_sent_type.cuda(), bert_sent_mask.cuda()
-                    if self.hp.dataset=="ur_funny":
-                        y = y.squeeze()
+                #with torch.cuda.device():
+                #    text, visual, audio, y, l, bert_sent, bert_sent_type, bert_sent_mask = \
+                #    text.cuda(), visual.cuda(), audio.cuda(), y.cuda(), l.cuda(), bert_sent.cuda(), \
+                #    bert_sent_type.cuda(), bert_sent_mask.cuda()
+                #    if self.hp.dataset=="ur_funny":
+                #        y = y.squeeze()
                 
                 batch_size = y.size(0)
 
@@ -234,15 +234,15 @@ class Solver(object):
                 for batch in loader:
                     text, vision, vlens, audio, alens, y, lengths, bert_sent, bert_sent_type, bert_sent_mask, ids = batch
 
-                    with torch.cuda.device(0):
-                        text, audio, vision, y = text.cuda(), audio.cuda(), vision.cuda(), y.cuda()
-                        lengths = lengths.cuda()
-                        bert_sent, bert_sent_type, bert_sent_mask = bert_sent.cuda(), bert_sent_type.cuda(), bert_sent_mask.cuda()
-                        if self.hp.dataset == 'iemocap':
-                            y = y.long()
-                    
-                        if self.hp.dataset == 'ur_funny':
-                            y = y.squeeze()
+                    #with torch.cuda.device(0):
+                    #    text, audio, vision, y = text.cuda(), audio.cuda(), vision.cuda(), y.cuda()
+                    #    lengths = lengths.cuda()
+                    #    bert_sent, bert_sent_type, bert_sent_mask = bert_sent.cuda(), bert_sent_type.cuda(), bert_sent_mask.cuda()
+                    #    if self.hp.dataset == 'iemocap':
+                    #        y = y.long()
+                    #
+                    #    if self.hp.dataset == 'ur_funny':
+                    #        y = y.squeeze()
 
                     batch_size = lengths.size(0) # bert_sent in size (bs, seq_len, emb_size)
 
